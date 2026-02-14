@@ -13,19 +13,23 @@ How _HQ fits into the broader development ecosystem, coordinating across project
 C4Context
     title System Context — _HQ Command Center
 
-    Person(dev, "Developer", "Portfolio owner managing 11 projects across multiple domains")
+    Person(dev, "Developer", "Portfolio owner managing 13 projects across multiple domains")
 
     System(hq, "_HQ", "Central coordination hub — multi-agent orchestration, standards distribution, drift detection, project scaffolding, portfolio tracking, strategic advisory")
 
     System_Ext(eng, "Engineering Agent", "Anthropic Claude — code, standards, commits, security, cross-project sync")
-    System_Ext(res, "Research Agent", "Google Gemini — web research, document analysis, image generation, content creation")
+    System_Ext(res, "Research Agent", "Google Gemini sidebar — web research, document analysis, image generation, content creation")
+    System_Ext(bg, "Background Ops Agent", "OpenAI Codex — async tasks, GPT code review, sandboxed execution")
+    System_Ext(deep, "Deep Research Agent", "Google Gemini CLI — native search, massive context, multimodal analysis")
     System_Ext(github, "GitHub", "Repository hosting — public, showcase, and private repos")
-    System_Ext(projects, "Project Portfolio", "11 registered projects (AI/ML, voice, knowledge, career, web)")
+    System_Ext(projects, "Project Portfolio", "13 registered projects (AI/ML, voice, knowledge, career, web)")
     System_Ext(apple, "Apple Ecosystem", "Calendar, Reminders — schedule and task integration")
 
     Rel(dev, hq, "Operates via commands", "/gogogo, /wrapup, /publish")
     Rel(hq, eng, "Dispatches engineering tasks", "Filesystem + CLI")
     Rel(hq, res, "Dispatches research tasks", "Message board + scratchpad")
+    Rel(hq, bg, "Dispatches background tasks", "Async via scratchpad")
+    Rel(hq, deep, "Dispatches deep research", "Message board + research/ files")
     Rel(hq, github, "Publishes repos, updates profile", "gh CLI")
     Rel(hq, projects, "Syncs standards, detects drift", "YAML registries + Jinja2")
     Rel(eng, projects, "Implements, tests, commits", "Git + Python")
@@ -54,7 +58,7 @@ C4Container
         Container(security, "Security Pipeline", "Bash + Python + Ollama", "9-phase scanner, LLM commercial detection, pre-publish security gate")
         Container(sessions, "Session Management", "Markdown", "Session memory, agent activity log, inter-agent scratchpad, startup/wrapup protocols")
         Container(board, "Board of Directors", "Markdown protocols", "5-persona strategic advisory with structured deliberation and formal resolutions")
-        Container(templates, "Template Engine", "Jinja2", "30+ templates — project files, CI/CD, security scanners, agent integration, architecture docs")
+        Container(templates, "Template Engine", "Jinja2", "48 versioned assets — project files, CI/CD, security scanners, agent integration, architecture docs")
         Container(publish, "Publication System", "Markdown + gh CLI", "Three-tier GitHub management — public, showcase, private with automated readiness checks")
     }
 
@@ -80,12 +84,12 @@ C4Container
 |----------|--------|-----|------------------------|
 | Data storage | YAML registries + Markdown | Zero dependencies, human-readable, git-friendly, editable by AI agents | SQLite (overhead for file-based coordination), JSON (less readable) |
 | Template engine | Jinja2 | Industry standard, supports conditionals and loops, Python-native | Cookiecutter (too opinionated), Copier (extra dependency), string formatting (insufficient) |
-| Multi-platform agent coordination | Convention-based (shared files) | Neither agent has real-time file detection; polling conventions are reliable across platforms | WebSocket notifications (over-engineered), database locks (wrong abstraction), single-platform (limits capability) |
+| Multi-platform agent coordination | Convention-based (shared files) | No agent has real-time file detection; polling conventions are reliable across all platforms | WebSocket notifications (over-engineered), database locks (wrong abstraction), single-platform (limits capability) |
 | Standards enforcement | Version-tracked sync with drift detection | Projects evolve independently; central enforcement would be brittle | Git submodules (merge conflicts), monorepo (projects are independent), copy-paste (no tracking) |
 | Security scanning | Multi-phase Bash + Python + local LLM | Catches secrets, PII, private paths, commercial markers in one pass before any publish | Pre-commit hooks only (misses non-git content), commercial tools (cost, vendor lock-in) |
 | Advisory system | Multi-persona simulation with deliberation protocol | Strategic decisions benefit from multiple perspectives; no scheduling overhead | Actual advisory board (premature at current scale), single-perspective analysis (blind spots) |
 | GitHub publication | Three-tier model (Public/Showcase/Private) | Maximizes portfolio visibility while protecting commercial IP | All-public (IP risk), all-private (no visibility), per-file access control (not supported) |
-| Agent platform selection | Claude (engineering) + Gemini (research) | Each platform has distinct strengths; dual-platform avoids vendor lock-in | Single platform (capability gaps), three+ platforms (coordination overhead exceeds value) |
+| Agent platform selection | Claude (engineering) + Codex (background ops) + Gemini (research x2) | Each platform has distinct strengths; three-platform approach maximizes capability coverage while convention-based coordination manages complexity | Single platform (capability gaps), two platforms (misses async and deep research lanes) |
 
 ---
 
@@ -179,13 +183,13 @@ flowchart TD
 | Git history hygiene | Pre-publish gate scans commit history for previously committed secrets; flags for remediation |
 | Showcase IP protection | Three-tier publication model ensures source code never appears in showcase repositories |
 | Content classification | Three-level system (public, context-only, private) controls what AI agents can read and output |
-| Cross-platform security | Both agents operate under the same security standards regardless of platform |
+| Cross-platform security | All four agents operate under the same security standards regardless of platform |
 
 ---
 
 ## 8. Component Interaction — Multi-Agent Coordination
 
-How two AI agents on different platforms coordinate through _HQ's shared infrastructure without real-time communication.
+How four AI agents on three platforms coordinate through _HQ's shared infrastructure without real-time communication.
 
 ```mermaid
 sequenceDiagram
@@ -193,16 +197,24 @@ sequenceDiagram
     participant Eng as Engineering Agent (Claude)
     participant HQ as _HQ Shared Infrastructure
     participant Res as Research Agent (Gemini)
+    participant BG as Background Ops (Codex)
+    participant Deep as Deep Research (Gemini CLI)
 
     Dev->>Eng: /gogogo (start engineering session)
     Eng->>HQ: Read session memory + scratchpad
-    HQ-->>Eng: Previous context + research agent notes
+    HQ-->>Eng: Previous context + all agent notes
     Eng->>HQ: Run sync, update status board
     Eng-->>Dev: Session ready — priorities + messages presented
 
     Dev->>Eng: Implementation task
     Eng->>HQ: Log activity
     Eng->>HQ: Post cross-project message (if needed)
+
+    Note over Dev: Dispatches background task
+
+    Dev->>BG: Async code review task
+    BG->>HQ: Read scratchpad for context
+    BG->>HQ: Write review findings to scratchpad
 
     Note over Dev: Switches to research agent
 
@@ -211,11 +223,17 @@ sequenceDiagram
     Res->>HQ: Write research findings
     Res->>HQ: Post to message board (if action needed for other projects)
 
+    Note over Dev: Deep research needed
+
+    Dev->>Deep: Deep analysis with web search
+    Deep->>HQ: Read research/ files for prior context
+    Deep->>HQ: Write comprehensive findings to research/ files
+
     Note over Dev: Returns to engineering agent
 
     Dev->>Eng: Continue implementation
     Eng->>HQ: Mid-session check — read scratchpad for new notes
-    HQ-->>Eng: Research agent findings available
+    HQ-->>Eng: All agent findings available
 
     Dev->>Eng: /wrapup (end session)
     Eng->>HQ: Read scratchpad for final updates

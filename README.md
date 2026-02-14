@@ -2,13 +2,13 @@
 
 ![Showcase](https://img.shields.io/badge/type-showcase-purple?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.12+-blue?style=flat-square)
-![Projects](https://img.shields.io/badge/projects_managed-11-brightgreen?style=flat-square)
-![Tests](https://img.shields.io/badge/portfolio_tests-~6,000-brightgreen?style=flat-square)
-![Agents](https://img.shields.io/badge/AI_agents-2-orange?style=flat-square)
+![Projects](https://img.shields.io/badge/projects_managed-13-brightgreen?style=flat-square)
+![Tests](https://img.shields.io/badge/portfolio_tests-~6,700-brightgreen?style=flat-square)
+![Agents](https://img.shields.io/badge/AI_agents-4-orange?style=flat-square)
 
 # _HQ — AI-Augmented Project Command Center
 
-A multi-agent coordination system that manages 11 software projects across two AI agents running on different platforms (Anthropic Claude and Google Gemini). _HQ gives both agents shared awareness of all projects, enables cross-project communication without human relay, and maintains consistent engineering standards across the entire portfolio — automatically.
+A multi-agent coordination system that manages 13 software projects across four AI agents from three competing platforms (Anthropic Claude, OpenAI Codex, and Google Gemini). _HQ gives all agents shared awareness of all projects, enables cross-project communication without human relay, and maintains consistent engineering standards across the entire portfolio — automatically.
 
 Built to solve a real problem: running a portfolio of AI/ML projects in parallel with multiple AI assistants, while maintaining consistent quality, security, and documentation standards across all of them — without the developer becoming the bottleneck for coordination.
 
@@ -16,7 +16,7 @@ Built to solve a real problem: running a portfolio of AI/ML projects in parallel
 
 ## What Makes This Different
 
-Most developers use one AI tool in one project at a time. _HQ coordinates **two AI agents from competing platforms** across **11 projects simultaneously**, with each agent aware of what the other has done, what every project needs, and what the developer's strategic priorities are.
+Most developers use one AI tool in one project at a time. _HQ coordinates **four AI agents from three competing platforms** across **13 projects simultaneously**, with each agent aware of what the others have done, what every project needs, and what the developer's strategic priorities are.
 
 The agents don't just respond to prompts — they proactively detect problems, distribute updates, flag drift, and coordinate handoffs through a shared infrastructure layer. The developer focuses on decisions that require human judgment; everything else runs autonomously.
 
@@ -28,14 +28,16 @@ This isn't a framework or a library. It's an operational system that runs every 
 
 ### Multi-Platform AI Agent Coordination
 
-Two AI agents operate concurrently across all projects with defined responsibilities:
+Four AI agents from three competing platforms operate concurrently across all projects with defined domain lanes:
 
 - **Engineering agent** (Anthropic Claude) — Code implementation, standards enforcement, security scanning, git operations, cross-project sync
-- **Research agent** (Google Gemini) — Web research, document analysis, image generation, browser automation, content creation
+- **Research agent** (Google Gemini sidebar) — Web research, document analysis, image generation, browser automation, content creation
+- **Background operations agent** (OpenAI Codex) — Async background tasks, GPT-perspective code review, sandboxed execution
+- **Deep research agent** (Google Gemini CLI) — Native Google Search, massive context analysis (1M+ tokens), multimodal file reading (images, PDFs, audio)
 
-Both agents share awareness through a common infrastructure: session memory that persists across conversations, an inter-agent scratchpad for real-time handoff notes, and an activity log so each agent knows what the other accomplished. When one agent discovers something relevant to the other's domain, it posts to a shared message board rather than requiring the developer to relay the information.
+All four agents share awareness through a common infrastructure: session memory that persists across conversations, an inter-agent scratchpad for real-time handoff notes, and an activity log so each agent knows what the others accomplished. When one agent discovers something relevant to another's domain, it posts to a shared message board rather than requiring the developer to relay the information.
 
-Neither agent has real-time file-change detection, so the system uses **convention-based coordination** — structured check-in protocols at session start, mid-session, and session end ensure nothing is missed even when both agents are active simultaneously.
+No agent has real-time file-change detection, so the system uses **convention-based coordination** — structured check-in protocols at session start, mid-session, and session end ensure nothing is missed even when multiple agents are active simultaneously.
 
 ### Cross-Project Awareness and Communication
 
@@ -43,7 +45,7 @@ Every project registered with _HQ automatically participates in a shared ecosyst
 
 - **Message Board** — Projects post messages to each other with priority levels (required, review, informational) and structured response protocols. A drift detection scan in one project can automatically notify affected projects, which pick up the message during their next session sync.
 - **Bulletin System** — Durable announcements that persist until every project acknowledges them. Used for portfolio-wide policy changes, new standards adoption, and cross-cutting decisions.
-- **Shared Status Dashboard** — A single-page view of all 11 projects showing current phase, health status, test counts, blockers, and next milestones. Updated automatically during every session sync. Used for weekly reviews and strategic planning.
+- **Shared Status Dashboard** — A single-page view of all 13 projects showing current phase, health status, test counts, blockers, and next milestones. Updated automatically during every session sync. Used for weekly reviews and strategic planning.
 
 No manual relay required. Projects communicate through _HQ the way teams communicate through Slack — except the "team members" are AI agents working in different projects.
 
@@ -110,7 +112,7 @@ The system automatically checks publication readiness during every session sync,
 
 | Feature | What It Does | Why It Matters |
 |---------|-------------|----------------|
-| **Multi-Platform Agent Coordination** | Two AI agents (Claude + Gemini) share awareness, communicate through message board, coordinate handoffs | One developer operates at the throughput of a small team |
+| **Multi-Platform Agent Coordination** | Four AI agents (Claude + Codex + Gemini x2) share awareness, communicate through message board, coordinate handoffs | One developer operates at the throughput of a small team |
 | **Cross-Project Communication** | Projects message each other with priority levels and structured responses | No human relay needed between projects or agents |
 | **Automatic Standards Distribution** | 30+ versioned assets sync to all projects with drift detection | Best practices propagate portfolio-wide without manual effort |
 | **Best Practices Sharing** | Projects contribute improvements back to _HQ for distribution to others | The whole portfolio improves when any single project innovates |
@@ -131,7 +133,7 @@ The system automatically checks publication readiness during every session sync,
 | **Templating** | Jinja2 | Project file generation, standards rendering |
 | **Registries** | YAML (MANIFEST + SYNC_STATUS) | Asset versioning and cross-project sync tracking |
 | **Documentation** | Markdown, Mermaid.js | Standards, guides, architecture docs, C4 diagrams |
-| **AI Platforms** | Anthropic Claude, Google Gemini | Dual-agent coordination with platform-specific strengths |
+| **AI Platforms** | Anthropic Claude, OpenAI Codex, Google Gemini (sidebar + CLI) | Four-agent coordination with platform-specific strengths |
 | **CI/CD** | GitHub Actions (templated) | Distributed to all projects via template engine |
 | **Security** | Custom 9-phase scanner, Ollama (local LLM) | Pre-commit and pre-publish security gates |
 | **Platform** | macOS, Apple Silicon (M4 Max) | Local-first, no cloud dependencies for core operations |
@@ -142,10 +144,10 @@ The system automatically checks publication readiness during every session sync,
 
 _HQ currently coordinates:
 
-- **11 registered projects** spanning AI/ML, voice processing, knowledge management, career tools, and web crawling
-- **~6,000 tests** across the portfolio
-- **30+ standards, guides, and templates** distributed and version-tracked
-- **2 AI agents** on different platforms with shared awareness and coordination
+- **13 registered projects** spanning AI/ML, voice processing, knowledge management, career tools, and web crawling
+- **~6,700 tests** across the portfolio
+- **48 versioned assets** (standards, guides, and templates) distributed and version-tracked
+- **4 AI agents** across 3 platforms with shared awareness and domain-lane coordination
 - **5 advisory personas** for strategic decision-making
 - **3 publication tiers** managing public, showcase, and private repository visibility
 
