@@ -1,0 +1,123 @@
+# CLAUDE.md — [Your Project Name]
+
+> **Project instruction file.** AI coding agents read this file automatically when they open the project.
+> Rename this file to `CLAUDE.md` and customize it for your project.
+
+---
+
+## Project Identity
+
+**Name:** [Your Project Name]
+**Description:** [One-line description of what this project does]
+**Tech Stack:** [e.g., Python 3.12, FastAPI, PostgreSQL, pytest]
+**Status:** [e.g., Active Development, Production, Maintenance]
+
+---
+
+## Quick Context Load
+
+Before doing anything, read these files to understand context:
+
+1. **`me/persona.md`** — Who the developer is (background, goals, preferences)
+2. **`me/plan.md`** — Current priorities and active goals
+3. **`sessions/session_memory.md`** — What happened in recent sessions
+
+If this project has a `DevPlan.md`, also read it for current phase and roadmap.
+
+---
+
+## Commands
+
+| Command | What It Does |
+|---------|-------------|
+| `/gogogo` | Session startup — load context, check git, present priorities. See `commands/gogogo.md`. |
+| `/wrapup` | Session close — commit, update session memory, handoff. See `commands/wrapup.md`. |
+
+---
+
+## Project Structure
+
+```
+project-root/
+├── CLAUDE.md               <- You are here (AI agent instructions)
+├── commands/               <- Session lifecycle commands
+│   ├── gogogo.md           <- Session startup protocol
+│   └── wrapup.md          <- Session close protocol
+├── sessions/               <- Cross-session state (gitignored)
+│   ├── session_memory.md   <- Persistent session log
+│   ├── scratchpad.md       <- Ephemeral inter-agent notes
+│   └── agent_activity.md   <- Agent coordination log
+├── me/                     <- Developer context
+│   ├── persona.md          <- Background, skills, preferences
+│   └── plan.md             <- Current goals and priorities
+├── src/                    <- Source code
+├── tests/                  <- Test suite
+└── ...
+```
+
+---
+
+## Agent Coordination
+
+<!-- Remove this section if you only use one AI agent -->
+
+### Domain Lanes
+
+Define which agent handles what to avoid conflicts:
+
+| Domain | Primary Agent | Notes |
+|--------|--------------|-------|
+| Source code (`src/`) | [Your engineering agent] | Implementation, refactoring, testing |
+| Research (`research/`) | [Your research agent] | Web research, analysis, comparisons |
+| Session files | All agents (append-only) | Every agent reads and writes session files |
+| Git operations | [Your engineering agent] | Only one agent should commit |
+
+### Session Memory Format
+
+All agents use the same format when writing to `sessions/session_memory.md`:
+
+```markdown
+---
+## [Date] — [Agent: TAG] — [Brief Title]
+**Project:** [project name]
+
+**What was done:**
+- [Items]
+
+**Files changed:**
+- `path/to/file` — [what changed]
+
+**Open items / handoff notes:**
+- [Items for next session or other agents]
+---
+```
+
+### Mid-Session Convention
+
+Before starting any new major task, re-read `sessions/scratchpad.md` for notes other agents may have left. No agent has real-time file-change detection — you only see updates when you actively read.
+
+---
+
+## Working Preferences
+
+<!-- Customize these for your working style -->
+
+- **Communication:** Be direct and concise. Assume technical competence.
+- **Code style:** Follow project conventions. Don't add comments for self-evident code.
+- **Testing:** Write tests for new functionality. Run existing tests before committing.
+- **Commits:** Use conventional commit format. Don't commit without asking first.
+
+---
+
+## Extension Points
+
+<!-- Add project-specific sections below. Examples: -->
+
+<!-- ### Standards Sync -->
+<!-- If you maintain shared standards across projects, add sync logic here -->
+
+<!-- ### CI/CD Integration -->
+<!-- Project-specific build and deploy instructions -->
+
+<!-- ### Environment Setup -->
+<!-- Local development environment requirements -->

@@ -7,23 +7,22 @@
 
 ## 1. System Context (C4 Level 1)
 
-How _HQ fits into the broader development ecosystem, coordinating across projects and AI agents on different platforms.
+How _HQ fits into a development workflow, coordinating across projects and AI agents on different platforms.
 
 ```mermaid
 C4Context
     title System Context — _HQ Command Center
 
-    Person(dev, "Developer", "Portfolio owner managing 13 projects across multiple domains")
+    Person(dev, "Developer", "Manages projects with AI coding agents")
 
-    System(hq, "_HQ", "Central coordination hub — multi-agent orchestration, standards distribution, drift detection, project scaffolding, portfolio tracking, strategic advisory")
+    System(hq, "_HQ", "Central coordination hub — session management, multi-agent orchestration, standards distribution, drift detection, project scaffolding")
 
-    System_Ext(eng, "Engineering Agent", "Anthropic Claude — code, standards, commits, security, cross-project sync")
-    System_Ext(res, "Research Agent", "Google Gemini sidebar — web research, document analysis, image generation, content creation")
-    System_Ext(bg, "Background Ops Agent", "OpenAI Codex — async tasks, GPT code review, sandboxed execution")
-    System_Ext(deep, "Deep Research Agent", "Google Gemini CLI — native search, massive context, multimodal analysis")
+    System_Ext(eng, "Engineering Agent", "Primary coding agent — implementation, standards, commits, security")
+    System_Ext(res, "Research Agent", "Web research, document analysis, image generation, content creation")
+    System_Ext(bg, "Background Ops Agent", "Async tasks, code review, sandboxed execution")
+    System_Ext(deep, "Deep Research Agent", "Search, massive context analysis, multimodal analysis")
     System_Ext(github, "GitHub", "Repository hosting — public, showcase, and private repos")
-    System_Ext(projects, "Project Portfolio", "13 registered projects (AI/ML, voice, knowledge, career, web)")
-    System_Ext(apple, "Apple Ecosystem", "Calendar, Reminders — schedule and task integration")
+    System_Ext(projects, "Project Portfolio", "Registered projects across multiple domains")
 
     Rel(dev, hq, "Operates via commands", "/gogogo, /wrapup, /publish")
     Rel(hq, eng, "Dispatches engineering tasks", "Filesystem + CLI")
@@ -49,22 +48,23 @@ C4Container
     Person(dev, "Developer", "Operates _HQ through session commands")
 
     System_Boundary(hq, "_HQ Command Center") {
-        Container(commands, "Command System", "Markdown protocols", "Session lifecycle: /gogogo, /wrapup, /publish, /board-meeting, /daily-standup")
+        Container(commands, "Command System", "Markdown protocols", "Session lifecycle: /gogogo, /wrapup — extensible with /publish, /board-meeting, etc.")
+        Container(sessions, "Session Management", "Markdown files", "session_memory.md, scratchpad.md, agent_activity.md — file-based state protocol")
         Container(standards, "Standards Engine", "Markdown + YAML", "Normative rules: security, conventions, commit format, TDD, project structure")
         Container(sync, "Sync System", "YAML + Python", "MANIFEST + SYNC_STATUS registries — version tracking, drift detection, visibility enforcement")
-        Container(scaffold, "Project Scaffolding", "Python + Jinja2", "Profile-based generation with post-generation hooks and auto-registration")
-        Container(portfolio, "Portfolio Tracker", "Markdown", "Portfolio catalog + status dashboard — project health, phases, blockers")
-        Container(messages, "Message Board", "Markdown", "Cross-project and cross-agent messaging with priority levels and structured responses")
-        Container(security, "Security Pipeline", "Bash + Python + Ollama", "9-phase scanner, LLM commercial detection, pre-publish security gate")
-        Container(sessions, "Session Management", "Markdown", "Session memory, agent activity log, inter-agent scratchpad, startup/wrapup protocols")
-        Container(board, "Board of Directors", "Markdown protocols", "5-persona strategic advisory with structured deliberation and formal resolutions")
-        Container(templates, "Template Engine", "Jinja2", "48 versioned assets — project files, CI/CD, security scanners, agent integration, architecture docs")
-        Container(publish, "Publication System", "Markdown + gh CLI", "Three-tier GitHub management — public, showcase, private with automated readiness checks")
+        Container(scaffold, "Project Scaffolding", "Python + Jinja2", "Profile-based generation with post-generation hooks")
+        Container(portfolio, "Portfolio Tracker", "Markdown", "Project status dashboard — health, phases, blockers")
+        Container(messages, "Message Board", "Markdown", "Cross-project and cross-agent messaging with priority levels")
+        Container(security, "Security Pipeline", "Bash + Python", "Multi-phase scanner, pre-publish security gate")
+        Container(board, "Board of Directors", "Markdown protocols", "Multi-persona strategic advisory with deliberation protocol")
+        Container(templates, "Template Engine", "Jinja2", "Versioned assets — project files, CI/CD, security scanners, agent integration")
+        Container(publish, "Publication System", "Markdown + gh CLI", "Three-tier GitHub management — public, showcase, private")
     }
 
     Rel(dev, commands, "Invokes", "Slash commands")
-    Rel(commands, sync, "Triggers sync", "During /gogogo")
-    Rel(commands, portfolio, "Updates status", "During /gogogo and /wrapup")
+    Rel(commands, sessions, "Reads/writes state", "At session start and end")
+    Rel(commands, sync, "Triggers sync", "During /gogogo extensions")
+    Rel(commands, portfolio, "Updates status", "During /gogogo and /wrapup extensions")
     Rel(commands, security, "Runs security gate", "During /publish and /commit")
     Rel(commands, board, "Convenes advisors", "During /board-meeting")
     Rel(commands, publish, "Audits and publishes", "During /publish")
@@ -78,7 +78,35 @@ C4Container
 
 ---
 
-## 3. Key Design Decisions
+## 3. Framework Directory Structure
+
+```
+_HQ/
+├── CLAUDE.md.template       <- AI agent instruction template
+├── GETTING_STARTED.md       <- Setup guide
+├── commands/                <- Session lifecycle protocols
+│   ├── gogogo.md            <- Session startup (with extension points)
+│   └── wrapup.md            <- Session close (with extension points)
+├── sessions/                <- File-based state protocol
+│   ├── README.md            <- Protocol documentation
+│   ├── session_memory.md    <- Persistent cross-session log (gitignored)
+│   ├── scratchpad.md        <- Ephemeral inter-agent notes (gitignored)
+│   └── agent_activity.md    <- Agent coordination log (gitignored)
+├── me/                      <- Developer context (user-created)
+│   ├── persona.md           <- Background, skills, preferences
+│   └── plan.md              <- Current goals and priorities
+├── standards/               <- Engineering standards (Phase 2)
+├── templates/               <- Jinja2 project templates (Phase 2)
+├── scaffold/                <- Project generator (Phase 2)
+├── guides/                  <- Best practices (Phase 3)
+├── messages/                <- Cross-project communication (Phase 4)
+├── portfolio/               <- Project status tracking (Phase 4)
+└── ARCHITECTURE.md          <- You are here
+```
+
+---
+
+## 4. Key Design Decisions
 
 | Decision | Choice | Why | Alternatives Considered |
 |----------|--------|-----|------------------------|
@@ -87,52 +115,41 @@ C4Container
 | Multi-platform agent coordination | Convention-based (shared files) | No agent has real-time file detection; polling conventions are reliable across all platforms | WebSocket notifications (over-engineered), database locks (wrong abstraction), single-platform (limits capability) |
 | Standards enforcement | Version-tracked sync with drift detection | Projects evolve independently; central enforcement would be brittle | Git submodules (merge conflicts), monorepo (projects are independent), copy-paste (no tracking) |
 | Security scanning | Multi-phase Bash + Python + local LLM | Catches secrets, PII, private paths, commercial markers in one pass before any publish | Pre-commit hooks only (misses non-git content), commercial tools (cost, vendor lock-in) |
-| Advisory system | Multi-persona simulation with deliberation protocol | Strategic decisions benefit from multiple perspectives; no scheduling overhead | Actual advisory board (premature at current scale), single-perspective analysis (blind spots) |
 | GitHub publication | Three-tier model (Public/Showcase/Private) | Maximizes portfolio visibility while protecting commercial IP | All-public (IP risk), all-private (no visibility), per-file access control (not supported) |
-| Agent platform selection | Claude (engineering) + Codex (background ops) + Gemini (research x2) | Each platform has distinct strengths; three-platform approach maximizes capability coverage while convention-based coordination manages complexity | Single platform (capability gaps), two platforms (misses async and deep research lanes) |
+| Agent platform selection | Best-of-breed per task type | Each platform has distinct strengths; multi-platform approach maximizes capability coverage | Single platform (capability gaps), two platforms (misses lanes) |
 
 ---
 
-## 4. Data Flow — Session Lifecycle
+## 5. Data Flow — Session Lifecycle
 
-The primary operational flow when a developer starts a work session. This runs every session across every project.
+The primary operational flow when a developer starts a work session.
 
 ```mermaid
 flowchart TD
     A["/gogogo — Session Start"] --> B[Load Context]
-    B --> B1[Read persona + strategic plan]
+    B --> B1[Read persona + plan]
     B --> B2[Read session memory]
     B --> B3[Read project instructions]
 
     B1 & B2 & B3 --> C[Git Status Check]
     C --> D{Uncommitted changes?}
     D -->|Yes| D1[Prompt: commit, stash, or continue]
-    D -->|No| E[Bi-Directional Sync]
+    D -->|No| E[Run Extensions]
 
     D1 --> E
-    E --> E1[Pull: HQ → Project]
-    E1 --> E2{Asset versions current?}
-    E2 -->|No| E3[Apply updates with visibility enforcement]
-    E2 -->|Yes| E4[All synced assets up to date]
-    E3 --> E5[Push: Project → HQ contributions]
-    E4 --> E5
+    E --> E1{Extensions configured?}
+    E1 -->|Yes| E2[Sync / Messages / Drift / Publication checks]
+    E1 -->|No| F[Present Session Status]
+    E2 --> F
 
-    E5 --> F[Update Portfolio + Status Board]
-    F --> G[GitHub Readiness Check]
-    G --> H[Check Message Board + Bulletins]
-    H --> I{Messages needing response?}
-    I -->|Yes| I1[Present by priority: required → review → informational]
-    I -->|No| J[Present Session Status]
-    I1 --> J
-
-    J --> K["Ready — What would you like to work on?"]
+    F --> G["Ready — What would you like to work on?"]
 ```
 
 ---
 
-## 5. Data Flow — Standards Distribution
+## 6. Data Flow — Standards Distribution
 
-How engineering standards propagate from _HQ to all registered projects, with visibility enforcement preventing private asset leakage to public repositories.
+How engineering standards propagate from _HQ to all registered projects, with visibility enforcement.
 
 ```mermaid
 flowchart LR
@@ -152,7 +169,7 @@ flowchart LR
 
 ---
 
-## 6. Data Flow — Cross-Project Communication
+## 7. Data Flow — Cross-Project Communication
 
 How projects communicate through _HQ without requiring the developer to relay information.
 
@@ -172,43 +189,25 @@ flowchart TD
 
 ---
 
-## 7. Security Posture
-
-| Concern | Approach |
-|---------|----------|
-| Secrets detection | 9-phase scanner checks for API keys, tokens, passwords, .env files, and private key patterns |
-| PII protection | Scanner detects names, emails, phone numbers, addresses; three-layer PII detection guide for projects |
-| Private content isolation | Visibility enforcement in sync system — private assets never sync to public projects |
-| Commercial sensitivity | Local LLM-powered scanner detects proprietary algorithms, trade secrets, and commercial markers |
-| Git history hygiene | Pre-publish gate scans commit history for previously committed secrets; flags for remediation |
-| Showcase IP protection | Three-tier publication model ensures source code never appears in showcase repositories |
-| Content classification | Three-level system (public, context-only, private) controls what AI agents can read and output |
-| Cross-platform security | All four agents operate under the same security standards regardless of platform |
-
----
-
 ## 8. Component Interaction — Multi-Agent Coordination
 
-How four AI agents on three platforms coordinate through _HQ's shared infrastructure without real-time communication.
+How multiple AI agents coordinate through _HQ's shared infrastructure without real-time communication.
 
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
-    participant Eng as Engineering Agent (Claude)
-    participant HQ as _HQ Shared Infrastructure
-    participant Res as Research Agent (Gemini)
-    participant BG as Background Ops (Codex)
-    participant Deep as Deep Research (Gemini CLI)
+    participant Eng as Engineering Agent
+    participant HQ as _HQ Shared Files
+    participant Res as Research Agent
+    participant BG as Background Ops Agent
 
     Dev->>Eng: /gogogo (start engineering session)
     Eng->>HQ: Read session memory + scratchpad
     HQ-->>Eng: Previous context + all agent notes
-    Eng->>HQ: Run sync, update status board
-    Eng-->>Dev: Session ready — priorities + messages presented
+    Eng-->>Dev: Session ready — priorities + status presented
 
     Dev->>Eng: Implementation task
-    Eng->>HQ: Log activity
-    Eng->>HQ: Post cross-project message (if needed)
+    Eng->>HQ: Log activity + post cross-project messages
 
     Note over Dev: Dispatches background task
 
@@ -220,60 +219,34 @@ sequenceDiagram
 
     Dev->>Res: Research task
     Res->>HQ: Read scratchpad for engineering notes
-    Res->>HQ: Write research findings
-    Res->>HQ: Post to message board (if action needed for other projects)
-
-    Note over Dev: Deep research needed
-
-    Dev->>Deep: Deep analysis with web search
-    Deep->>HQ: Read research/ files for prior context
-    Deep->>HQ: Write comprehensive findings to research/ files
+    Res->>HQ: Write research findings to scratchpad
 
     Note over Dev: Returns to engineering agent
 
     Dev->>Eng: Continue implementation
-    Eng->>HQ: Mid-session check — read scratchpad for new notes
+    Eng->>HQ: Mid-session check — read scratchpad
     HQ-->>Eng: All agent findings available
 
     Dev->>Eng: /wrapup (end session)
-    Eng->>HQ: Read scratchpad for final updates
-    Eng->>HQ: Update session memory with full session summary
-    Eng->>HQ: Commit all changes
+    Eng->>HQ: Update session memory + agent activity
     Eng-->>Dev: Handoff summary for next session
 ```
 
 ---
 
-## 9. Strategic Advisory Board — Deliberation Flow
+## 9. Security Posture
 
-How the Board of Directors simulation produces multi-perspective strategic analysis.
-
-```mermaid
-flowchart TD
-    A["/board-meeting — Topic Presented"] --> B[Load Context]
-    B --> B1[Read strategic plan + portfolio status]
-    B --> B2[Read project health dashboard]
-    B --> B3[Read session history]
-
-    B1 & B2 & B3 --> C[Stage Setting]
-    C --> D[Brief: current situation + specific question]
-
-    D --> E[Round Table — Each Advisor Speaks]
-    E --> E1["Career Strategist: Market positioning + opportunity analysis"]
-    E --> E2["Technical Architect: System design + technology decisions"]
-    E --> E3["Financial Advisor: Runway + income prioritization"]
-    E --> E4["HR Executive: Credentials + organizational strategy"]
-    E --> E5["Military Mentor: Leadership + operational discipline"]
-
-    E1 & E2 & E3 & E4 & E5 --> F[Cross-Talk and Debate]
-    F --> G[Board Resolution]
-    G --> G1[Decision summary]
-    G --> G2[Action items with owners]
-    G --> G3[Dissenting opinions noted]
-    G --> G4[Follow-up timeline]
-```
+| Concern | Approach |
+|---------|----------|
+| Secrets detection | Multi-phase scanner checks for API keys, tokens, passwords, .env files, private key patterns |
+| PII protection | Scanner detects names, emails, phone numbers, addresses |
+| Private content isolation | Visibility enforcement — private assets never sync to public projects |
+| Git history hygiene | Pre-publish gate scans commit history for previously committed secrets |
+| Content classification | Three-level system (public, context-only, private) controls what AI agents can read and output |
+| Cross-platform security | All agents operate under the same security standards regardless of platform |
 
 ---
 
-*This document describes the system architecture without exposing implementation details, private content, or proprietary configurations.*
+*This document describes the system architecture. See [GETTING_STARTED.md](GETTING_STARTED.md) for setup instructions and [README.md](README.md) for an overview.*
+
 *Copyright 2026 TJ Neary. All Rights Reserved.*
