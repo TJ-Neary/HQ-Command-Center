@@ -9,7 +9,7 @@
 
 A file-based framework for managing AI coding agents across sessions and projects. Give your agents persistent memory, structured handoffs, and multi-agent coordination — without servers, databases, or platform lock-in.
 
-**Built in production**, not in theory. This system runs daily across 15 projects, 5 AI agents from 3 competing platforms (Anthropic Claude, OpenAI Codex, Google Gemini), and 70 agent instances — all coordinating through shared markdown files, conventions, and an MCP coordination server.
+**Built in production**, not in theory. This system runs daily across 15 projects, 5 AI agents from 3 competing platforms (Anthropic Claude, OpenAI Codex, Google Gemini), and 75 agent instances — all coordinating through shared markdown files, conventions, and an MCP coordination server.
 
 **[Get Started in 15 minutes >>>](GETTING_STARTED.md)**
 
@@ -135,10 +135,11 @@ See **[GETTING_STARTED.md](GETTING_STARTED.md)** for the full setup guide.
 This isn't a theoretical framework — it's extracted from a system that runs daily:
 
 - **15 registered projects** spanning AI/ML, voice processing, knowledge management, career tools, and web crawling
-- **~7,300 tests** across the portfolio, all managed through _HQ's standards distribution
-- **5 AI agents across 3 platforms** (Claude, Codex CLI, Codex Extension, Gemini CLI, Gemini Sidebar) — 70 agent instances with shared awareness
-- **82 versioned assets** (standards, guides, templates) distributed with drift detection
+- **~9,900 tests** across the portfolio, all managed through _HQ's standards distribution
+- **5 AI agents across 3 platforms** (Claude, Codex CLI, Codex Extension, Gemini CLI, Antigravity IDE) — 75 agent instances with shared awareness
+- **77 cataloged assets** (standards, guides, templates) distributed with drift detection
 - **MCP coordination server** — 15 tools for structured multi-agent coordination via stdio transport
+- **Verified capability audits** — each agent has a self-audited runtime capability file, ensuring accurate task routing
 - **Convention-based coordination** — no agent has real-time detection, yet handoffs work reliably through file-based protocols
 
 The phased release extracts and genericizes each layer of this system so others can adopt the parts they need.
@@ -171,7 +172,7 @@ Works with any AI coding agent that can read and write files:
 | Claude Code | Tested | Primary development platform. Reads `CLAUDE.md` automatically. |
 | Cursor | Compatible | Use `.cursorrules` to reference commands |
 | OpenAI Codex | Tested | Use `AGENTS.md` for instruction file |
-| Gemini (sidebar) | Tested | Use `ANTIGRAVITY.md` for instruction file |
+| Antigravity IDE | Tested | Use `ANTIGRAVITY.md` for instruction file |
 | Gemini CLI | Tested | Reads `GEMINI.md` |
 | Windsurf | Compatible | Use `.windsurfrules` for instruction file |
 
