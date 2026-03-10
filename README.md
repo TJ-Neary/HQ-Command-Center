@@ -9,7 +9,7 @@
 
 A file-based framework for managing AI coding agents across sessions and projects. Give your agents persistent memory, structured handoffs, and multi-agent coordination — without servers, databases, or platform lock-in.
 
-**Built in production**, not in theory. This system runs daily across 15 projects, 5 AI agents from 3 competing platforms (Anthropic Claude, OpenAI Codex, Google Gemini), and 75 agent instances — all coordinating through shared markdown files, conventions, and an MCP coordination server.
+**Built in production**, not in theory. This system runs daily across 18 projects, 8 AI agents from 4 competing platforms (Anthropic Claude, OpenAI Codex, Google Gemini, Cursor), and 100+ agent instances — all coordinating through shared markdown files, conventions, and an MCP coordination server.
 
 **[Get Started in 15 minutes >>>](GETTING_STARTED.md)**
 
@@ -119,8 +119,12 @@ cp CLAUDE.md.template your-project/CLAUDE.md
 
 # Create local session files (gitignored)
 echo "# Session Memory" > your-project/sessions/session_memory.md
-echo -e "# Scratchpad\n\n## Open Notes" > your-project/sessions/scratchpad.md
-echo -e "# Agent Activity\n\n## Recent Activity" > your-project/sessions/agent_activity.md
+echo -e "# Scratchpad
+
+## Open Notes" > your-project/sessions/scratchpad.md
+echo -e "# Agent Activity
+
+## Recent Activity" > your-project/sessions/agent_activity.md
 
 # Customize CLAUDE.md with your project info, then:
 # Start any AI coding session and type: /gogogo
@@ -136,7 +140,7 @@ This isn't a theoretical framework — it's extracted from a system that runs da
 
 - **15 registered projects** spanning AI/ML, voice processing, knowledge management, career tools, and web crawling
 - **~9,900 tests** across the portfolio, all managed through _HQ's standards distribution
-- **5 AI agents across 3 platforms** (Claude, Codex CLI, Codex Extension, Gemini CLI, Antigravity IDE) — 75 agent instances with shared awareness
+- **8 AI agents across 4 platforms** (Claude, Codex CLI, Codex Extension, Gemini CLI, Antigravity IDE, Cursor IDE, Cursor CLI, Kendra) — 100+ agent instances with shared awareness
 - **77 cataloged assets** (standards, guides, templates) distributed with drift detection
 - **MCP coordination server** — 15 tools for structured multi-agent coordination via stdio transport
 - **Verified capability audits** — each agent has a self-audited runtime capability file, ensuring accurate task routing
